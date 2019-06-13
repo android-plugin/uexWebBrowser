@@ -2,7 +2,7 @@
 *.apk
 *.ap_
 
-# Files for the ART/Dalvik VM
+# Files for the Dalvik VM
 *.dex
 
 # Java class files
@@ -32,9 +32,16 @@ proguard/
 # Android Studio captures folder
 captures/
 
-# Intellij
+# Android Studio Configs
+.idea/
 *.iml
-.idea/workspace.xml
 
-# Keystore files
-*.jks
+### AndroidStudio Patch ###
+
+!/gradle/wrapper/gradle-wrapper.jar
+
+# Legacy Eclipse project files
+.classpath
+.project
+.cproject
+.settings/
