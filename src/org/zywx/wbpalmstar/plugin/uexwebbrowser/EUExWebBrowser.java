@@ -1,6 +1,7 @@
 package org.zywx.wbpalmstar.plugin.uexwebbrowser;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
@@ -18,7 +19,7 @@ import org.zywx.wbpalmstar.plugin.uexwebbrowser.vo.OpenVO;
 
 public class EUExWebBrowser extends EUExBase {
 
-
+    private static final String TAG = "EUExWebBrowser";
     private static final String BUNDLE_DATA = "data";
 
     WebView mX5WebView;
@@ -56,6 +57,7 @@ public class EUExWebBrowser extends EUExBase {
         mX5WebView.setWebViewClient(mX5WebViewClient);
         mX5WebView.setWebChromeClient(mX5WebChromeClient);
         mX5WebSettings =mX5WebView.getSettings();
+        printX5KernelDebugLog();
         initWebSetttings();
         configWebView(initVO);
     }
@@ -73,6 +75,12 @@ public class EUExWebBrowser extends EUExBase {
         mX5WebSettings.setAppCacheMaxSize(Long.MAX_VALUE);
         mX5WebSettings.setUseWideViewPort(true);
         mX5WebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        if (!isX5Enabled()){
+            //如果X5内核未加载成功时，则需要手动设置允许混合模式，解决个别页面或者视频无法正常显示和播放的问题（http与https）
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mX5WebSettings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            }
+        }
     }
 
     private void configWebView(InitVO initVO){
@@ -81,6 +89,32 @@ public class EUExWebBrowser extends EUExBase {
         }
         WebView.setWebContentsDebuggingEnabled(initVO.debug);
 
+    }
+
+    /**
+     * 输出调试版本信息
+     */
+    private void printX5KernelDebugLog(){
+        int x5SdkVersion = WebView.getTbsSDKVersion(mContext);
+        int x5CoreVersion = WebView.getTbsCoreVersion(mContext);
+        BDebug.d(TAG ,"printX5KernelDebugLog: x5SdkVersion=" + x5SdkVersion);
+        if (mX5WebView == null){
+            return;
+        }
+        if (isX5Enabled()){
+            BDebug.d(TAG, "printX5KernelDebugLog: using X5 Core");
+            BDebug.d(TAG, "printX5KernelDebugLog: x5CoreVersion=" + x5CoreVersion);
+        }else{
+            BDebug.d(TAG, "printX5KernelDebugLog: not using X5 Core, using System Core");
+        }
+    }
+
+    /**
+     * 是否已经加载成功X5内核
+     *
+     */
+    private boolean isX5Enabled(){
+        return mX5WebView.getX5WebViewExtension() != null;
     }
 
     public boolean open(String[] params) {
