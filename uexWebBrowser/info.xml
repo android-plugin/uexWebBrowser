@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <uexplugins>
     <plugin
-        uexName="uexWebBrowser" version="4.0.0" build="0">
-        <info>0:uexWebBrowser</info>
+        uexName="uexWebBrowser" version="4.3.1" build="2019061302">
+        <info>1:修复X5加载失败时，个别视频页面无法播放的问题；优化X5内核的配置，增加调试日志。</info>
+        <build>0:uexWebBrowser</build>
     </plugin>
 
 </uexplugins>
