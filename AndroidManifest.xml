@@ -25,7 +25,8 @@
     tools:overrideLibrary="org.zywx.wbpalmstar.widgetone.uex">
 
     <application
-        android:label="WebBrowser">
+        android:label="WebBrowser"
+        tools:replace="android:label">
         <activity
             android:name="org.zywx.wbpalmstar.engine.LoadingActivity"
             android:configChanges="keyboardHidden|orientation"
