@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <uexplugins>
     <plugin
-        uexName="uexWebBrowser" version="4.3.1" build="2019061302">
-        <info>1:修复X5加载失败时，个别视频页面无法播放的问题；优化X5内核的配置，增加调试日志。</info>
+        uexName="uexWebBrowser" version="4.3.2" build="2022041901">
+        <info>2:升级X5SDK为44181版本20220419更新。增加全局主动初始化X5内核的接口。移除自动初始化X5内核逻辑。</info>
+        <build>1:修复X5加载失败时，个别视频页面无法播放的问题；优化X5内核的配置，增加调试日志。</build>
         <build>0:uexWebBrowser</build>
     </plugin>
 
