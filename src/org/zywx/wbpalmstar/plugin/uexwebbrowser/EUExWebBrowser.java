@@ -5,10 +5,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.RelativeLayout;
 
-import com.tencent.smtt.sdk.*;
+import com.tencent.smtt.sdk.QbSdk;
+import com.tencent.smtt.sdk.TbsListener;
+import com.tencent.smtt.sdk.ValueCallback;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
 
 import org.zywx.wbpalmstar.base.BDebug;
 import org.zywx.wbpalmstar.engine.DataHelper;
@@ -186,36 +189,52 @@ public class EUExWebBrowser extends EUExBase {
 
 
     public static void onApplicationCreate(Context context){
+    }
+
+    public void initGlobalWebCore(String[] params) {
+        int callbackId = -1;
+        if (params.length > 0) {
+            try {
+                callbackId = Integer.parseInt(params[0]);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        final int finalCallbackId = callbackId;
         QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
 
             @Override
             public void onViewInitFinished(boolean arg0) {
-                BDebug.e(" onViewInitFinished is " + arg0);
+                BDebug.i(TAG, " onViewInitFinished is " + arg0);
+                callbackToJs(finalCallbackId, false, "onViewInitFinished");
             }
 
             @Override
             public void onCoreInitFinished() {
-
+                BDebug.i(TAG, "onCoreInitFinished");
+                callbackToJs(finalCallbackId, false, "onCoreInitFinished");
             }
         };
         QbSdk.setTbsListener(new TbsListener() {
             @Override
             public void onDownloadFinish(int i) {
-                BDebug.d("onDownloadFinish is " + i);
+                BDebug.i(TAG, "onDownloadFinish is " + i);
+                callbackToJs(finalCallbackId, false, "onDownloadFinish", i);
             }
 
             @Override
             public void onInstallFinish(int i) {
-                BDebug.d("onInstallFinish is " + i);
+                BDebug.i(TAG, "onInstallFinish is " + i);
+                callbackToJs(finalCallbackId, false, "onInstallFinish", i);
             }
 
             @Override
             public void onDownloadProgress(int i) {
-                BDebug.d("onDownloadProgress:"+i);
+                BDebug.i(TAG, "onDownloadProgress:"+i);
+                callbackToJs(finalCallbackId, false, "onDownloadProgress", i);
             }
         });
 
-        QbSdk.initX5Environment(context,  cb);
-
+        QbSdk.initX5Environment(mContext,  cb);
     }
 }
